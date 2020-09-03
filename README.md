@@ -16,6 +16,7 @@ v0.1.0
 * [ESLint] to maintain a consistent code style in JavaScript 🤝
 * [Canvas] to create a 2D context for the game ⚡
 * [webpack] to help keep this project under the required 13kb  📦
+* [OscillatorNode] for fancy space music and sound effects 🎶
 
 
 [ESLint]: http://eslint.org
@@ -24,3 +25,4 @@ v0.1.0
 [Node.js]: https://nodejs.org/en/
 [Canvas]: https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API
 [webpack]: https://webpack.js.org/
+[OscillatorNode]: https://developer.mozilla.org/en-US/docs/Web/API/OscillatorNode
