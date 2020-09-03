@@ -30,17 +30,30 @@
 			color: #000;
 		}
 
+		aside {
+			float: left;
+			width: 50%;
+			margin-bottom: 1em;
+		}
+
+		aside:nth-child(2) {
+			text-align: right;
+		}
+
 		#game {
 			padding: 1em;
 			margin: 1em auto;
 			width: 1080px;
 			background: #101;
 			border: 0.5em groove rgba(100, 10, 120, 0.2);
+			overflow: auto;
 		}
 
 		#g {
+			clear: both;
 			width: 1080px;
-			height: 602px;
+			height: 612px;
+			background: pink;
 		}
 
 		#l {
@@ -67,18 +80,18 @@
 		Universe Not Found
 	</h1>
 	<div id="game">
-		<div>
-			<i id="s"></i>
+		<aside id="m"></aside>
+		<aside>
 			<i id="t"></i>
-		</div>
-		<p id="m"></p>
+			<i id="s"></i>
+		</aside>
 		<main id="g"></main>
 		<pre id="l">||------ Captains Log ------||</pre>
 	</div>
 	<p>After a failed deep space mission, a small fleet finds itself adrift in a universe unknown.</p>
 	<p>They must travel through black holes looking for a Goldilocks Universe.</p>
 	<p>No one knows what happens upon entering a black hole. The fleet has rigged their <span class="f">ships</span> to
-		leave <mark>markers</mark> behind to provide a trail of their failed journey in the event of a failed mission.
+		leave <mark>markers</mark> behind to provide a trail of their doomed journey in the event of a failed mission.
 	</p>
 	<p>Thankfully, each <span class="f">ships</span> is equipped with a C1 level <span class="p">research probe</span>
 		piloted with AI Techs.</p>
