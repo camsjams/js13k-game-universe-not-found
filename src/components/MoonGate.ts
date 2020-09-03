@@ -32,7 +32,9 @@ export const checkCollisions = (universe: Universe, player: Player): boolean => 
 	}
 
 	const center = getCenter(universe);
-	return boxCollides([player[0], player[1]], player[2], [center[0], center[1]], MOON_GATE_SIZE * 2);
+	return boxCollides([
+		player[0], player[1]], player[2], [center[0] - MOON_GATE_SIZE, center[1] - MOON_GATE_SIZE
+	], MOON_GATE_SIZE * 2);
 };
 
 export function render($ctx: CanvasRenderingContext2D, universe: Universe): void {

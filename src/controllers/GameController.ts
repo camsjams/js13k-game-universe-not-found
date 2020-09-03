@@ -4,6 +4,7 @@ import levels from '../constants/Levels';
 let currentPlayer: Player | undefined = undefined;
 let currentLevel: Level | undefined = undefined;
 let currentUniverse: Universe | undefined = undefined;
+let stageMulti = 1;
 
 const getPlayer = (): Player | undefined => {
 	const probe = probes.pop();
@@ -19,6 +20,7 @@ const getPlayer = (): Player | undefined => {
 
 const getCurrentLevel = (): Level | undefined => {
 	const nextLevel = levels.shift();
+	stageMulti = 3 - levels.length;
 	return nextLevel;
 };
 
@@ -39,6 +41,7 @@ export const getContext = (): GameContext => {
 	return {
 		player: currentPlayer,
 		level: currentLevel,
+		levelNum: stageMulti,
 		universe: currentUniverse
 	};
 };
