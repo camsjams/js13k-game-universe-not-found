@@ -29,8 +29,8 @@ canvas.width = GAME_WIDTH;
 canvas.height = GAME_HEIGHT;
 const $ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
-const capLog: CaptainsLog = (message: string): void => {
-	$log.prepend(`[${new Date().toLocaleTimeString()}]: ${message}\n`);
+const capLog: CaptainsLog = (message: string, isGarbledTime?: boolean): void => {
+	$log.prepend(`[${isGarbledTime ? '??:??:?? ::' : new Date().toLocaleTimeString()}]: ${message}\n`);
 };
 
 function resetPlayerToUniverse(player: Player, universe: Universe): void {
@@ -79,8 +79,9 @@ function checkDoors(player: Player, universe: Universe): boolean {
 function handleMoonGateEntry(player: Player) {
 	goToNextLevel();
 	capLog('Moon Gate Entered');
-	capLog('----');
-	capLog('We have entered into a new Mother Universe!');
+	capLog('----', true);
+	capLog('We have entered into a new Mother Universe!', true);
+	capLog('Calibrated sensors to new time vortex');
 	fuelLeft = FUEL_AMOUNT;
 	player[0] = WIDTH / 2;
 	player[1] = HEIGHT / 2;
@@ -103,8 +104,8 @@ function updatePlayerData(timeDifference: number, player: Player, universe: Univ
 }
 
 const smartUpdate = (value: string, ele: HTMLElement): void => {
-	if (value !== ele.innerText) {
-		ele.innerText = value;
+	if (value !== ele.innerHTML) {
+		ele.innerHTML = value;
 	}
 };
 
@@ -115,9 +116,13 @@ function update(timeDifference: number, game: GameContext): boolean {
 		wasDestroyed = updatePlayerData(timeDifference, game.player, game.universe);
 	}
 
-	smartUpdate(`Fuel: ${~~fuelLeft}`, $time);
-	smartUpdate(`Survivors: ${ships.length * 100}`, $score);
-	smartUpdate(`Status: Exploring | ${ships.length} ships left | ${probes.length} probes left`, $message);
+	smartUpdate(`<b>Fuel:</b> ${~~fuelLeft}`, $time);
+	smartUpdate(`<b>Survivors:</b> ${ships.length * 100}`, $score);
+	smartUpdate(
+		`<b>Status:</b>
+		Exploring <i>Level ${game.levelNum}</i> |
+		 ${ships.length} <i>ships left</i> | ${probes.length} <i>probes left</i>`,
+		$message);
 
 	if (wasDestroyed) {
 		capLog('Vessel Lost');
