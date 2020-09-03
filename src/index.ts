@@ -124,7 +124,7 @@ function update(timeDifference: number, game: GameContext): boolean {
 		 ${ships.length} <i>ships left</i> | ${probes.length} <i>probes left</i>`,
 		$message);
 
-	if (wasDestroyed) {
+	if (wasDestroyed && game.levelNum === getContext().levelNum) {
 		capLog('Vessel Lost');
 	}
 
