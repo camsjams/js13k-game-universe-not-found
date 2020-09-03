@@ -155,7 +155,7 @@ function loop(): void {
 	}
 
 	if (!game.player) {
-		$g.innerHTML = '<div class="over"><h2>Game Over</h2></div>';
+		$g.innerHTML = '<div class="over"><h2>Game Over</h2><p>Refresh reality (... the page) to Retry</div>';
 		return;
 	}
 
