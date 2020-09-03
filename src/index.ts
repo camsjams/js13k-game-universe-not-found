@@ -76,18 +76,18 @@ function checkDoors(player: Player, universe: Universe): boolean {
 	return false;
 }
 
-function handleMoonGateEntry(player: Player) {
+function handleMoonGateEntry(player: Player, levelNum: number) {
 	goToNextLevel();
-	capLog('Moon Gate Entered');
+	capLog('Moon Gate Entered.');
 	capLog('----', true);
-	capLog('We have entered into a new Mother Universe!', true);
-	capLog('Calibrated sensors to new time vortex');
-	fuelLeft = FUEL_AMOUNT;
+	capLog(`We have entered into a new Mother Universe: M\u03BC${levelNum + 1}.`, true);
+	capLog('Calibrated sensors to new time vortex.');
+	fuelLeft = FUEL_AMOUNT * levelNum + 1;
 	player[0] = WIDTH / 2;
 	player[1] = HEIGHT / 2;
 }
 
-function updatePlayerData(timeDifference: number, player: Player, universe: Universe): boolean {
+function updatePlayerData(timeDifference: number, player: Player, universe: Universe, levelNum: number): boolean {
 	const vel = updatePlayer(timeDifference);
 	player[0] += vel[0];
 	player[1] += vel[1];
@@ -95,7 +95,7 @@ function updatePlayerData(timeDifference: number, player: Player, universe: Univ
 	checkBoundaries(player, universe);
 	const wasDestroyed = checkDoors(player, universe);
 	if (onEnterMoonGate(universe, player)) {
-		handleMoonGateEntry(player);
+		handleMoonGateEntry(player, levelNum);
 		return true;
 	}
 
@@ -113,7 +113,7 @@ function update(timeDifference: number, game: GameContext): boolean {
 	let wasDestroyed = false;
 	if (game.player && game.universe) {
 		fuelLeft -= timeDifference * .25;
-		wasDestroyed = updatePlayerData(timeDifference, game.player, game.universe);
+		wasDestroyed = updatePlayerData(timeDifference, game.player, game.universe, game.levelNum);
 	}
 
 	smartUpdate(`<b>Fuel:</b> ${~~fuelLeft}`, $time);
@@ -125,7 +125,7 @@ function update(timeDifference: number, game: GameContext): boolean {
 		$message);
 
 	if (wasDestroyed && game.levelNum === getContext().levelNum) {
-		capLog('Vessel Lost');
+		capLog('Vessel Lost.');
 	}
 
 	return wasDestroyed;
