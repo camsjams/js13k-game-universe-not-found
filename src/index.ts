@@ -235,8 +235,13 @@ function reset(): void {
 }
 
 ((): void => {
-	reset();
-	playBgm();
-	lastTime = Date.now();
-	loop();
+	const title = document.getElementById('title') as HTMLElement;
+	const game = document.getElementById('game') as HTMLElement;
+	title.addEventListener('click', () => {
+		game.className = '';
+		reset();
+		playBgm();
+		lastTime = Date.now();
+		loop();
+	});
 })();

@@ -193,6 +193,6 @@ sequence3.treble.frequency.value = 1400;
 export const playBgm = (): void => {
 	const when = ac.currentTime;
 	sequence1.play(when);
-	sequence2.play(when);
+	sequence2.play(when + 15.5);
 	sequence3.play(when);
 };
