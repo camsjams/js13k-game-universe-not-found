@@ -12,7 +12,7 @@ This game is a memory-game mixed with puzzle exploration game, where black holes
 v0.1.0
 
 ## Demo
-[Link coming soon](https://camsjams.github.io/js13k-game-universe-not-found)
+[Link](https://cameronmanavian.com/js13k-game-universe-not-found/)
 
 ## Platforms / Technologies
 * [JavaScript] Primary language for this project 🚀
