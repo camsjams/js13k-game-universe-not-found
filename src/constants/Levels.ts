@@ -44,8 +44,8 @@ const levels: Levels = [
 			y: HEIGHT_WITH_GAP,
 			name: '\u03A5',
 			doors: [
-				[WIDTH - PADDING, HEIGHT * .45, 3],
-				[PADDING, HEIGHT * .7, -1]
+				[WIDTH - PADDING, HEIGHT * .45, -1],
+				[PADDING, HEIGHT * .7, 3]
 			]
 		},
 		{
@@ -78,8 +78,7 @@ const levels: Levels = [
 			y: 0,
 			name: '\u03B2',
 			doors: [
-				[PADDING + PADDING, PADDING + PADDING, -1],
-				[WIDTH - PADDING, HEIGHT * .8, 1]
+				[145, HEIGHT * .75, 1]
 			]
 		},
 		{
@@ -87,7 +86,8 @@ const levels: Levels = [
 			y: 0,
 			name: '\u03B3',
 			doors: [
-				[WIDTH - PADDING, HEIGHT * .15, 5]
+				[PADDING + PADDING, PADDING + PADDING, -1],
+				[WIDTH - PADDING, HEIGHT * .8, 5]
 			]
 		},
 		{
@@ -106,8 +106,8 @@ const levels: Levels = [
 			y: HEIGHT_WITH_GAP,
 			name: '\u03B4',
 			doors: [
-				[WIDTH - PADDING, HEIGHT * .66, 6],
-				[123, 200, -1]
+				[WIDTH - PADDING, HEIGHT * .66, -1],
+				[123, 200, 6]
 			]
 		},
 		{
@@ -115,8 +115,8 @@ const levels: Levels = [
 			y: HEIGHT_WITH_GAP,
 			name: '\u03B6',
 			doors: [
-				[PADDING + PADDING, PADDING + PADDING, -1],
-				[WIDTH - PADDING, HEIGHT * .1, 7]
+				[PADDING + PADDING, PADDING + PADDING, 7],
+				[WIDTH - PADDING, HEIGHT * .1, -1]
 			]
 		},
 		{

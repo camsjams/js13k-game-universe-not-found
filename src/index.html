@@ -11,7 +11,13 @@
 		:root {
 			--shipColor: rgba(34, 100, 140, 0.9);
 			--probeColor: rgba(0, 255, 0, 0.5);
-			--capColor: coral
+			--capColor: coral;
+		}
+
+		h1 {
+			font-family: Impact, 'Arial Narrow Bold', sans-serif;
+			color: var(--shipColor);
+			text-align: center;
 		}
 
 		body {
@@ -21,10 +27,6 @@
 
 		.f {
 			color: var(--shipColor);
-		}
-
-		.r {
-			color: orange;
 		}
 
 		.p {
@@ -75,13 +77,24 @@
 			color: var(--shipColor);
 		}
 
-		#game {
+		#game,
+		#rules {
 			padding: 1em;
-			margin: 1em auto;
+			margin: 0 auto;
 			width: 1080px;
-			background: #101;
 			border: 0.5em groove rgba(100, 10, 120, 0.2);
+		}
+
+		#game {
+			background: #101;
 			overflow: auto;
+		}
+
+		#rules {
+			color: var(--capColor);
+			background: #080708;
+			border-top: 0.5em solid black !important;
+			border-color: #111;
 		}
 
 		#g {
@@ -114,6 +127,21 @@
 			color: #7B68EE;
 			font-family: Courier, monospace;
 		}
+
+		footer {
+			margin: 1em auto;
+			padding: 0;
+			width: 1080px;
+			color: #333;
+		}
+
+		footer a {
+			color: var(--shipColor);
+		}
+
+		footer a:hover {
+			color: var(--capColor);
+		}
 	</style>
 </head>
 
@@ -130,19 +158,23 @@
 		<main id="g"></main>
 		<pre id="l"><br />&Tab;&Tab;&Tab;&Tab;&Tab;||------ Captains Log ------||</pre>
 	</div>
-	<p>After a failed deep space mission, a small fleet finds itself adrift in a universe unknown.</p>
-	<p>They must travel through black holes looking for a Goldilocks Universe.</p>
-	<p>No one knows what happens upon entering a black hole. The fleet has rigged their <span class="f">ships</span> to
-		leave <mark>markers</mark> behind to provide a trail of their doomed journey in the event of a failed mission.
-	</p>
-	<p>Thankfully, each <span class="f">ships</span> is equipped with a C1 level <span class="p">research probe</span>
-		piloted with AI Techs.</p>
-	<p>Minimize casualties, and know that not everyone will survive.</p>
-	<p>P.S. Avoid <span class="r">unknown ships</span> - we most focus on survival.</p>
-
+	<div id="rules">
+		<p>After a failed deep space mission, a small fleet finds itself adrift in a universe unknown. They must travel
+			through black holes looking for a Goldilocks Universe.</p>
+		<p>No one knows what happens upon entering a black hole.</p>
+		<p>The fleet has rigged their <span class="f">ships</span>
+			to
+			leave <mark>markers</mark> behind to provide a trail of their doomed journey in the event of a failed
+			mission.
+		</p>
+		<p>Thankfully, each <span class="f">ship</span> is also equipped with a C1 level <span class="p">research
+				probe</span>
+			piloted with AI Techs, allowing for deep space exploration without endangering lives.</p>
+		<p>Minimize casualties, and know that <b>not everyone will survive.</b></p>
+	</div>
 	<footer>
-		Created By: <a href="https://cameronmanavian.com">Cameron Manavian</a> |<a href="https://moongatelabs.com">Moon
-			Gate Lab</a>
+		Created By: <a href="https://cameronmanavian.com">Cameron Manavian</a> | <a href="https://moongatelabs.com">Moon
+			Gate Labs</a>
 	</footer>
 </body>
 

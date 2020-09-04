@@ -6,7 +6,9 @@
     "dev": "webpack-dev-server",
     "build": "NODE_ENV=production webpack"
   },
-  "dependencies": {},
+  "dependencies": {
+    "tinymusic": "^1.0.0"
+  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "4.0.1",
     "@typescript-eslint/parser": "4.0.1",

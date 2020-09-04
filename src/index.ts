@@ -6,12 +6,32 @@ import {
 	goToNextLevel
 } from './controllers/GameController';
 import updatePlayer, {render as renderPlayer} from './controllers/PlayerController';
+import {
+	playWarp,
+	play404,
+	playEnterGate,
+	playNoFuel,
+	playGameWin,
+	playGameLoss,
+	playBgm
+} from './controllers/SoundController';
 import {checkCollisions} from './components/Door';
 import {checkCollisions as onEnterMoonGate} from './components/MoonGate';
+import {render as renderSuccess} from './components/Success';
 import {render as renderShips} from './components/Ship';
 import {render as renderProbes} from './components/Probe';
 import {render as renderUniverses} from './components/Universe';
-import {ships, probes, PROBE_SIZE, FUEL_AMOUNT, GAME_HEIGHT, GAME_WIDTH, WIDTH, HEIGHT} from './constants/Game';
+import {
+	ships,
+	probes,
+	PROBE_SIZE,
+	FUEL_AMOUNT,
+	GAME_HEIGHT,
+	GAME_WIDTH,
+	WIDTH,
+	HEIGHT,
+	GAME_STATE
+} from './constants/Game';
 
 let lastTime = 0;
 let fuelLeft = FUEL_AMOUNT;
@@ -34,8 +54,8 @@ const capLog: CaptainsLog = (message: string, isGarbledTime?: boolean): void => 
 };
 
 function resetPlayerToUniverse(player: Player, universe: Universe): void {
-	player[0] = (universe.x + WIDTH) / 2;
-	player[1] = (universe.y + HEIGHT) / 2;
+	player[0] = universe.x + 0;
+	player[1] = universe.y + HEIGHT / 2;
 
 	if (!universe.doors.length) {
 		capLog('A Moon Gate! Should we enter it?');
@@ -58,49 +78,69 @@ function checkBoundaries(player: Player, universe: Universe): void {
 	}
 }
 
-function checkDoors(player: Player, universe: Universe): boolean {
+const getLevelFuel = (levelNum: number): number => FUEL_AMOUNT * Math.max(1, levelNum - 1);
+
+function checkDoors(player: Player, universe: Universe, levelNum: number): number {
 	const doorEntered = checkCollisions(universe, player);
 	if (doorEntered) {
 		if (doorEntered[2] > -1) {
 			const nextUniverse = goToUniverse(doorEntered[2]);
 			if (nextUniverse) {
+				playWarp();
 				resetPlayerToUniverse(player, nextUniverse);
 			}
 		} else {
-			fuelLeft = FUEL_AMOUNT;
+			fuelLeft = getLevelFuel(levelNum);
+			play404();
 			destroyActivePlayer();
-			return true;
+			return GAME_STATE.DESTROYED;
 		}
 	}
 
-	return false;
+	return GAME_STATE.NORMAL;
 }
 
 function handleMoonGateEntry(player: Player, levelNum: number) {
+	playEnterGate();
 	goToNextLevel();
 	capLog('Moon Gate Entered.');
 	capLog('----', true);
 	capLog(`We have entered into a new Mother Universe: M\u03BC${levelNum + 1}.`, true);
 	capLog('Calibrated sensors to new time vortex.');
-	fuelLeft = FUEL_AMOUNT * levelNum + 1;
+	fuelLeft = getLevelFuel(levelNum + 1);
 	player[0] = WIDTH / 2;
 	player[1] = HEIGHT / 2;
 }
 
-function updatePlayerData(timeDifference: number, player: Player, universe: Universe, levelNum: number): boolean {
+function checkFuel(vel: Velocity, levelNum: number): number {
+	fuelLeft -= (Math.abs(vel[0]) + Math.abs(vel[1])) * .5;
+	if (fuelLeft < 0) {
+		capLog('Fuel Supply Empty.');
+		capLog('Vessel Lost.');
+		capLog('---');
+		fuelLeft = getLevelFuel(levelNum);
+		playNoFuel();
+		destroyActivePlayer();
+		return GAME_STATE.FUEL_EMPTY;
+	}
+
+	return GAME_STATE.NORMAL;
+}
+
+function updatePlayerData(timeDifference: number, player: Player, universe: Universe, levelNum: number): number {
 	const vel = updatePlayer(timeDifference);
 	player[0] += vel[0];
 	player[1] += vel[1];
 
 	checkBoundaries(player, universe);
-	const wasDestroyed = checkDoors(player, universe);
+	const gameStateChange = checkDoors(player, universe, levelNum);
 	if (onEnterMoonGate(universe, player)) {
 		handleMoonGateEntry(player, levelNum);
-		return true;
+		return 2;
 	}
 
-	fuelLeft -= (Math.abs(vel[0]) + Math.abs(vel[1])) * .5;
-	return wasDestroyed;
+	const fuelResult = checkFuel(vel, levelNum);
+	return fuelResult !== GAME_STATE.NORMAL ? fuelResult : gameStateChange;
 }
 
 const smartUpdate = (value: string, ele: HTMLElement): void => {
@@ -109,11 +149,11 @@ const smartUpdate = (value: string, ele: HTMLElement): void => {
 	}
 };
 
-function update(timeDifference: number, game: GameContext): boolean {
-	let wasDestroyed = false;
+function update(timeDifference: number, game: GameContext): number {
+	let gameStateChange = 0;
 	if (game.player && game.universe) {
 		fuelLeft -= timeDifference * .25;
-		wasDestroyed = updatePlayerData(timeDifference, game.player, game.universe, game.levelNum);
+		gameStateChange = updatePlayerData(timeDifference, game.player, game.universe, game.levelNum);
 	}
 
 	smartUpdate(`<b>Fuel:</b> ${~~fuelLeft}`, $time);
@@ -124,11 +164,13 @@ function update(timeDifference: number, game: GameContext): boolean {
 		 ${ships.length} <i>ships left</i> | ${probes.length} <i>probes left</i>`,
 		$message);
 
-	if (wasDestroyed && game.levelNum === getContext().levelNum) {
+	if (gameStateChange === GAME_STATE.DESTROYED) {
+		capLog('Warning - ERC#+404-0-404: Universe Not Found!');
 		capLog('Vessel Lost.');
+		capLog('---');
 	}
 
-	return wasDestroyed;
+	return gameStateChange;
 }
 
 function render(game: GameContext): void {
@@ -143,25 +185,48 @@ function render(game: GameContext): void {
 	}
 }
 
+function onLoopEnd(now: number): void {
+	lastTime = now;
+	requestAnimationFrame(loop);
+}
+
+function onGameWin(): void {
+	playGameWin();
+	renderSuccess($ctx, ships.length > 2);
+}
+
+function onGameLost(): void {
+	smartUpdate(`<div class="over">
+		<h2>Game Over</h2>
+		<p>Refresh reality (...the page) to Retry</p>
+		</div>`, $g);
+	playGameLoss();
+}
+
+// eslint-disable-next-line max-statements
 function loop(): void {
 	const now = Date.now();
 	const timeDifference = (now - lastTime) / 1000.0;
 	const game = getContext();
-	if (update(timeDifference, game)) {
-		lastTime = now;
-		requestAnimationFrame(loop);
+	$ctx.clearRect(0, 0, canvas.width, canvas.height);
+	if (game.levelNum === 3 && game.universe === undefined) {
+		onGameWin();
+		return;
+	}
+
+	if (update(timeDifference, game) !== GAME_STATE.NORMAL) {
+		onLoopEnd(now);
 		$ctx.clearRect(0, 0, canvas.width, canvas.height);
 		return;
 	}
 
 	if (!game.player) {
-		$g.innerHTML = '<div class="over"><h2>Game Over</h2><p>Refresh reality (... the page) to Retry</div>';
+		onGameLost();
 		return;
 	}
 
 	render(game);
-	lastTime = now;
-	requestAnimationFrame(loop);
+	onLoopEnd(now);
 }
 
 function reset(): void {
@@ -171,6 +236,7 @@ function reset(): void {
 
 ((): void => {
 	reset();
+	playBgm();
 	lastTime = Date.now();
 	loop();
 })();

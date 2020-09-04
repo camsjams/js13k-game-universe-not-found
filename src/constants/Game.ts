@@ -13,6 +13,13 @@ export const WIDTH_WITH_GAP = WIDTH + 15;
 export const HEIGHT_WITH_GAP = HEIGHT + 35;
 export const PADDING = 10;
 
+export const GAME_STATE = {
+	NORMAL: 0,
+	DESTROYED: 1,
+	ENTERED_MOON_GATE: 2,
+	FUEL_EMPTY: 3
+};
+
 export const ships: Coords[] = [
 	[PADDING, 5],
 	[PADDING, 50],

@@ -9,6 +9,9 @@ This game is a memory-game mixed with puzzle exploration game, where black holes
 ## Current Version
 v0.1.0
 
+## Demo
+[Link coming soon](https://camsjams.github.io/js13k-game-universe-not-found)
+
 ## Platforms / Technologies
 * [JavaScript] Primary language for this project 🚀
 * [Node.js] a JavaScript runtime built on Chrome's V8 JavaScript engine 🏎️
@@ -16,11 +19,12 @@ v0.1.0
 * [ESLint] to maintain a consistent code style in JavaScript 🤝
 * [Canvas] to create a 2D context for the game ⚡
 * [webpack] to help keep this project under the required 13kb  📦
-* [OscillatorNode] for fancy space music and sound effects 🎶
+* [OscillatorNode] for fancy space music and sound effects 🎶 - via [TinyMusic] (Thanks to Kevin Ennis)
 
 
 [ESLint]: http://eslint.org
 [TypeScript]: https://typescriptlang.org/
+[TinyMusic]: https://github.com/kevincennis/TinyMusic
 [JavaScript]: http://en.wikipedia.org/wiki/JavaScript
 [Node.js]: https://nodejs.org/en/
 [Canvas]: https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API
