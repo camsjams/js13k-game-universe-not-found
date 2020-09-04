@@ -24,17 +24,19 @@ import {render as renderUniverses} from './components/Universe';
 import {
 	ships,
 	probes,
-	PROBE_SIZE,
 	FUEL_AMOUNT,
 	GAME_HEIGHT,
 	GAME_WIDTH,
 	WIDTH,
 	HEIGHT,
-	GAME_STATE
+	GAME_STATE, addVessels
 } from './constants/Game';
+import {addLevels} from './constants/Levels';
 
 let lastTime = 0;
+let gameStart = 0;
 let fuelLeft = FUEL_AMOUNT;
+let missionAccomplished = 3;
 
 const $score = document.getElementById('s') as HTMLElement;
 const $time = document.getElementById('t') as HTMLElement;
@@ -63,8 +65,8 @@ function resetPlayerToUniverse(player: Player, universe: Universe): void {
 }
 
 function checkBoundaries(player: Player, universe: Universe): void {
-	const MAX_WIDTH = universe.x + WIDTH - PROBE_SIZE;
-	const MAX_HEIGHT = universe.y + HEIGHT - PROBE_SIZE;
+	const MAX_WIDTH = universe.x + WIDTH - player[2];
+	const MAX_HEIGHT = universe.y + HEIGHT - player[2];
 	if (player[0] < universe.x) {
 		player[0] = universe.x;
 	} else if (player[0] > MAX_WIDTH) {
@@ -192,7 +194,7 @@ function onLoopEnd(now: number): void {
 
 function onGameWin(): void {
 	playGameWin();
-	renderSuccess($ctx, ships.length > 2);
+	renderSuccess($ctx, ships.length === missionAccomplished, gameStart);
 }
 
 function onGameLost(): void {
@@ -209,7 +211,7 @@ function loop(): void {
 	const timeDifference = (now - lastTime) / 1000.0;
 	const game = getContext();
 	$ctx.clearRect(0, 0, canvas.width, canvas.height);
-	if (game.levelNum === 3 && game.universe === undefined) {
+	if (game.levelNum > 1 && game.universe === undefined) {
 		onGameWin();
 		return;
 	}
@@ -239,9 +241,21 @@ function reset(): void {
 	const game = document.getElementById('game') as HTMLElement;
 	title.addEventListener('click', () => {
 		game.className = '';
+
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
+		if (document.monetization && document.monetization.state === 'started') {
+			capLog('We Have Discovered a Coil Scribe! Our Ships Were Cloned.');
+			capLog('Our Sensors Have Detected Additional Levels Because of the Coil Scribe.');
+			addVessels();
+			missionAccomplished = 4;
+			addLevels();
+		}
+
 		reset();
 		playBgm();
 		lastTime = Date.now();
+		gameStart = Date.now();
 		loop();
 	});
 })();

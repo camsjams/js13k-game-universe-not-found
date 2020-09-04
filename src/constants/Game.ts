@@ -31,3 +31,9 @@ export const probes: Coords[] = [
 	[ships[1][0] + SHIP_SIZE, ships[1][1]],
 	[ships[2][0] + SHIP_SIZE, ships[2][1]]
 ];
+
+export const addVessels = (): void => {
+	ships.push([PADDING, 140]);
+	probes.push([ships[3][0] + SHIP_SIZE, ships[3][1]]);
+	probes.push([PADDING + SHIP_SIZE, 180]);
+};

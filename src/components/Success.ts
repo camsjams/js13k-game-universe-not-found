@@ -4,11 +4,13 @@ import {GAME_WIDTH, GAME_HEIGHT} from '../constants/Game';
 const RADIUS = GAME_WIDTH / 6;
 const CENTER = [GAME_WIDTH / 2, GAME_HEIGHT / 2];
 
-export function render($ctx: CanvasRenderingContext2D, hasAllShips: boolean): void {
+export function render($ctx: CanvasRenderingContext2D, hasAllShips: boolean, startTime: number): void {
+	const timeDifference = (Date.now() - startTime) / 1000.0;
 	$ctx.fillStyle = '#fff';
 	$ctx.font = '25px "Courier New", Courier, monospace';
 	$ctx.fillText('You Found a Safe Universe', GAME_WIDTH / 3, 25);
 	$ctx.font = '20px "Courier New", Courier, monospace';
+	$ctx.fillText(`Your Journey Score Was ${timeDifference} (lower is better)`, GAME_WIDTH / 4, 545);
 	if (hasAllShips) {
 		$ctx.fillStyle = '#2E8B57';
 		$ctx.fillText('Accomplished Leader: All Ships Survived', GAME_WIDTH / 3.5, 65);
